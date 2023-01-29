@@ -7,6 +7,12 @@ def my_dict(dict):
 
 print(my_dict({"name":"Kelly", "age" : 25, "salary":8000, "city":"New York"})) 
 
+def my_dict2(dict, keys_to_keep):
+    new_dict = {key: dict[key] for key in keys_to_keep}
+
+    return(new_dict)
+print(my_dict2({"name":"Kelly", "age" : 25, "salary":8000, "city":"New York"}, ["name","salary" ]))
+
 
 #Task 2
 

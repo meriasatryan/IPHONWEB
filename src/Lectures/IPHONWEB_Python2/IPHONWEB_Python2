@@ -1,0 +1,180 @@
+#Task 1
+def no_dublicates(list):
+    return set(list)
+    
+print(no_dublicates([1,1,2,2,3,3,4,5,5]))
+
+
+#Task 2
+def common(list1, list2):
+    return (set(list1) & set(list2))
+
+print(common([1,2,3], [1,2,4]))
+
+
+#Task 3
+def first(list1, list2):
+    return set(list1) - set(list2)
+
+print(first([1,2,3], [1,2,4]))
+
+
+#Task 4
+def union(list1, list2):
+    return (set(list1) ^ set(list2)) 
+
+print(union([1,2,3], [1,2,4]))
+
+
+#Task 5
+def union_of_both(list1, list2):
+    return set(list1) | set(list2)
+
+print(union_of_both([1,2,3], [1,2,4]))
+
+
+#Task 6
+def remove(set, element):
+    if element in set:
+        set.remove(element)
+    return set
+print(remove({1,2,3,4}, 4))
+
+
+#Task 7
+def cube(set):
+    list = []
+    for i in set:
+        list.append(i**3)
+    return list
+#return [i**3 for i in set]
+print(cube({1,2,3}))
+
+
+#Task 8
+def add_dict(dict, key, value):
+    dict.update({key : value})
+    return dict
+print(add_dict({}, "hello", "bye"))
+
+def add_dict2(dict, key, value):
+    dict[key] = value
+    return dict
+print(add_dict2({}, "hello", "bye"))
+
+
+#Task 9 
+def concate(dict1, dict2):
+    dict1.update(dict2)
+    return dict1
+print(concate({"a": 1}, {"b": 2}))
+
+
+#Task 10
+def create_dict(n):
+    my_dict = {}
+    for i in range(1,n+1):
+        my_dict[i] = i**3
+    return my_dict
+print(create_dict(5)) 
+
+
+#Task 11
+def lists_to_dict(list1, list2):
+    my_dict = {}
+    for i in range(len(list1)):
+        my_dict[(list1[i])] = list2[i]
+    return my_dict
+print(lists_to_dict(["a","b","c"], [1,2,3]))
+
+
+#Task 12
+def max_dict(dict):
+    values = sorted(dict.values())
+    return (values[-1])
+print(max_dict({"a": 1, "b" :2, "c":3}))
+
+
+#Task 13
+def reader(n):
+    with open("my_text.txt", "r") as file:
+        lines = file.readlines()
+        for i in range(n+1):
+            print (lines[i])
+#reader(3)
+
+
+#Task 14
+def longest_word():
+    with open("my_text.txt", "r") as file:
+        lines = file.readlines()
+        words = str(lines).split(" ")
+        #print(sorted(words, key = len))
+        return(sorted(words, key = len)[-1])
+print(longest_word())
+
+
+#Task 15
+def num_of_words(text):
+    with open(str(text) + ".txt", "r" ) as file:
+        lines = file.read()
+
+        words = lines.split(" ")
+        for word in words:
+            if "," in word:
+                words.extend(word.split(","))
+                words.remove(word)
+        return len(words)
+
+#len(f.read().replace(",", " ").split())
+print(num_of_words("my_text"))
+
+
+
+import string
+#Task 16
+def alphabet(n):
+    with open("my_text.txt", "w") as file:
+        letters = string.ascii_uppercase
+        b = len(letters)//n
+        x = 0
+        z = n
+        for i in range(b+1):
+            file.write(letters[x:n]+"\n")
+            x+=z
+            n+=z
+alphabet(3)
+
+
+#Task 17
+def age(n):
+    my_dict = {}
+    for i in range(0,1):
+        my_dict[i] = "Just Born"
+    for i in range(1,10):
+        my_dict[i] = "Child"
+    for i in range(10,18):
+        my_dict[i] = "Teenager"
+    for i in range(18,50):
+        my_dict[i] = "Young"
+    for i in range(50,500):
+        my_dict[i] = "Old" 
+    return my_dict[n]
+
+print(age(18))
+print(age(0))
+print(age(67))
+
+
+    
+def copy_content():
+    with open("my_text.txt", "r") as file:
+        lines = file.readlines()
+        with open("my_text.txt", "w") as file:
+            file.write(str(lines))
+copy_content()
+
+
+
+
+        
