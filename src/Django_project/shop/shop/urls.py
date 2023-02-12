@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .api.category import CategoryView
+from .api.buyer import BuyerView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("api/category", CategoryView.as_view()),
+    path("api/buyer", BuyerView.as_view()),
+    path("api/category/<int:id>", CategoryView.check_view)
 ]
+
+
+
