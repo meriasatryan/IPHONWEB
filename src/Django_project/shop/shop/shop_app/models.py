@@ -69,7 +69,7 @@ class MyBag(models.Model):
     items = models.ManyToManyField(Item)
     total_price = models.FloatField(blank=True, null=True)
 
-class Purchase(models.Mode):
+class Purchase(models.Model):
     items = models.ManyToManyField(Item)
     buy_time = models.DateTimeField(default=timezone.now)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
