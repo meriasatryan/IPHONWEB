@@ -1,0 +1,15 @@
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import permissions
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
+
+from ..serializers.storecategory import StoreCategorySerializer
+
+from ..models.product import StoreCategory
+
+class View(viewsets.ModelViewSet):
+    quaryset = StoreCategory.object.all()
+    serializer_class = StoreCategorySerializer
+    permission_classes = [AllowAny]
+

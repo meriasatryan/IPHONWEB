@@ -1,13 +1,13 @@
 import json
 from django.views.generic import View
 from django.http import HttpResponse
-from ..shop_app.models import Category
+from ..shop_app.models import StoreOwner
 from django.core.exceptions import ObjectDoesNotExist
 
 #-------------------------------------------------------------------------------
 
 
-class CategoryView(View):
+class StoreOwnerView(View):
     @staticmethod
     def data_status(data):
         return HttpResponse(
@@ -15,6 +15,7 @@ class CategoryView(View):
             status = 200,
             content_type="application/json",
         )
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
@@ -24,68 +25,69 @@ class CategoryView(View):
         )
 
 #-------------------------------------------------------------------------------
-
-
+#Here we need registation as my StoreOwner has user
+"""
     def get(self, request):
-        categories = Category.objects.all()
+        owners = StoreOwner.objects.all()
         data = []
-        for category in categories:
-           data.append({"name":category.name, "id":category.id})
+        for owner in owners:
+           data.append({"date":owner.registrated_at, "id":owner.id})
         return self.data_status(data)
 
 #-------------------------------------------------------------------------------
 
     def post(self, request):
         data = json.loads(request.body)
-        category = Category.objects.create(
-            name=data['name']
+        owner = StoreOwner.objects.create(
+            name=data['date']
         )
-        category.save()
+        owner.save()
         return self.ok_status()
-    
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
     def delete(request, id):
         try:
-            category = Category.objects.get(id=id)
+            owner = StoreOwner.objects.get(id=id)
         except ObjectDoesNotExist:
             return HttpResponse({"status": "obj_not_found"})
         
-        category.delete()
-        return CategoryView.ok_status()
-    
+        owner.delete()
+        return StoreOwnerView.ok_status()
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
     
     def check_view(request, id):
         if request.method == "GET":
-            return CategoryView.get_single(request, id)
+            return StoreOwnerView.get_single(request, id)
         if request.method == "DELETE":
-            return CategoryView.delete(request, id)
+            return StoreOwnerView.delete(request, id)
         if request.method == "PATCH":
-            return CategoryView.edit(request, id)
+            return StoreOwnerView.edit(request, id)
+
 #-------------------------------------------------------------------------------
-      
+
     @staticmethod
     def get_single(request, id):
         try:
-            category = Category.objects.get(id=id)
+            owner = StoreOwner.objects.get(id=id)
         except ObjectDoesNotExist:
             return HttpResponse({"status": "obj_not_found"})
-        return CategoryView.data_status({"id": category.id, "name": category.name})
-
+        return StoreOwnerView.data_status({"id": owner.id, "name": owner.name})
+    
 #-------------------------------------------------------------------------------
 
     @staticmethod
     def edit(request, id):
         data = json.loads(request.body)
         try:
-            category = Category.objects.get(id=id)
+            storeowner = StoreOwner.objects.get(id=id)
         except:
             return HttpResponse({"status": "obj_not_found"})
         if "name" in data:
-            category.name = data["name"]
-        category.save()
-        return CategoryView.ok_status()
+            storeowner.name = data["name"]
+        storeowner.save()
+        return StoreOwnerView.ok_status()"""

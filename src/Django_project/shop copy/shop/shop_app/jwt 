@@ -1,0 +1,105 @@
+#
+import jwt
+#
+from datetime import datetime, timedelta
+@staticmethod
+def generate_jwt(user):
+    jwt_payload = {
+        "user_id": user.id,
+        "email": user.user.email,
+        "first_name": user.user.first_name,
+        "last_name": user.user.last_name,
+        "expiration": str(datetime.utcnow() + timedelta(hours=1)),
+        "issued_at_time": str(datetime.utcnow()),
+    }
+    jwt_token = jwt.encode(jwt_payload, "SECRET_KEY", algorithm="HS256")
+    return jwt_token
+
+
+
+class UserAuth:
+
+    def user_login(request):
+        if request.method == 'POST':
+            form = AuthenticationForm(data=request.POST)
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect('home')
+        else:
+            form = AuthenticationForm()
+        return render(request, 'auth/login.html', {'form': form})
+
+
+    def register(request):
+        data = json.loads(request.body)
+
+        try: 
+            password = data["password"]
+            email = data["email"]
+            first_name = data["first_name"]
+            last_name = data["last_name"]
+
+        except KeyError:
+            return HttpResponse("Blah blah blah")
+        
+        if User.objects.filter(username = email). exists():
+            return HttpResponse(
+                json.dumps(
+                {
+                    "status" : "error", 
+                    "error": {
+                        "code" : 1,
+                        "text": "This email is already used"
+                    },
+                }
+            ),
+            status = 200,
+            content_type = "application/json",
+        )
+
+        user = User.objects.create_user(username=email, password=password, email=email)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        sales_man = Seller.objects.create(
+            user = user,
+        )
+        sales_man.save()
+
+        return ok_status()
+    
+  
+class UserAuthView(View):
+    @staticmethod
+    def login(request):
+        data = json.loads(request.body.decode("utf-8"))
+
+        try:
+            email = data["email"]
+            password = data["password"]
+
+        except KeyError:
+            return HttpResponse("Error")
+        
+        user = authenticate(user = email, password = password)
+        if user:
+            try:
+                sales_man = Seller.objects.get(user = user)
+            except ObjectDoesNotExist:
+                return HttpResponse("you are not registered")
+            
+            login(request, user)
+            jwt_token = generate_jwt(sales_man)
+            refresh_jwt_token = generate_jwt(sales_man)
+
+            response = JsonResponse(
+                {"access_token":jwt_token, "refresh_token":refresh_jwt_token}
+            )
+            response.set_cookie("reftresh_token", refresh_jwt_token, )
+            
+

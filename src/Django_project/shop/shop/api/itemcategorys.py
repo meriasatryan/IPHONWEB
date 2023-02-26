@@ -1,13 +1,13 @@
 import json
 from django.views.generic import View
 from django.http import HttpResponse
-from ..shop_app.models import Category
+from ..shop_app.models import ItemCategory
 from django.core.exceptions import ObjectDoesNotExist
 
 #-------------------------------------------------------------------------------
 
 
-class CategoryView(View):
+class ItemCategoryView(View):
     @staticmethod
     def data_status(data):
         return HttpResponse(
@@ -15,6 +15,7 @@ class CategoryView(View):
             status = 200,
             content_type="application/json",
         )
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
@@ -25,11 +26,10 @@ class CategoryView(View):
 
 #-------------------------------------------------------------------------------
 
-
     def get(self, request):
-        categories = Category.objects.all()
+        itemcategories = ItemCategory.objects.all()
         data = []
-        for category in categories:
+        for category in itemcategories:
            data.append({"name":category.name, "id":category.id})
         return self.data_status(data)
 
@@ -37,44 +37,45 @@ class CategoryView(View):
 
     def post(self, request):
         data = json.loads(request.body)
-        category = Category.objects.create(
+        category = ItemCategory.objects.create(
             name=data['name']
         )
         category.save()
         return self.ok_status()
-    
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
     def delete(request, id):
         try:
-            category = Category.objects.get(id=id)
+            category = ItemCategory.objects.get(id=id)
         except ObjectDoesNotExist:
             return HttpResponse({"status": "obj_not_found"})
         
         category.delete()
-        return CategoryView.ok_status()
-    
+        return ItemCategoryView.ok_status()
+
 #-------------------------------------------------------------------------------
 
     @staticmethod
     
     def check_view(request, id):
         if request.method == "GET":
-            return CategoryView.get_single(request, id)
+            return ItemCategoryView.get_single(request, id)
         if request.method == "DELETE":
-            return CategoryView.delete(request, id)
+            return ItemCategoryView.delete(request, id)
         if request.method == "PATCH":
-            return CategoryView.edit(request, id)
+            return ItemCategoryView.edit(request, id)
+
 #-------------------------------------------------------------------------------
-      
+
     @staticmethod
     def get_single(request, id):
         try:
-            category = Category.objects.get(id=id)
+            itemcategory = ItemCategory.objects.get(id=id)
         except ObjectDoesNotExist:
             return HttpResponse({"status": "obj_not_found"})
-        return CategoryView.data_status({"id": category.id, "name": category.name})
+        return ItemCategoryView.data_status({"id": itemcategory.id, "name": itemcategory.name})
 
 #-------------------------------------------------------------------------------
 
@@ -82,10 +83,10 @@ class CategoryView(View):
     def edit(request, id):
         data = json.loads(request.body)
         try:
-            category = Category.objects.get(id=id)
+            itemcategory = ItemCategory.objects.get(id=id)
         except:
             return HttpResponse({"status": "obj_not_found"})
         if "name" in data:
-            category.name = data["name"]
-        category.save()
-        return CategoryView.ok_status()
+            itemcategory.name = data["name"]
+        itemcategory.save()
+        return ItemCategoryView.ok_status()
